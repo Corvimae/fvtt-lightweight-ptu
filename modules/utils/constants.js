@@ -1,3 +1,5 @@
+export const POKEMON_STRING = 'Pokémon';
+
 export const STAT_SHORT_NAMES = {
   hp: 'HP',
   atk: 'ATK',
@@ -17,30 +19,22 @@ export const STAT_FULL_NAMES = {
 };
 
 export const SKILL_NAMES = {
-  breathless: 'Breathless',
-  fasting: 'Fasting',
-  endurance: 'Endurance',
-  resistant: 'Resistant',
-  browbeat: 'Browbeat',
-  jump: 'Jump',
-  sprint: 'Sprint',
-  strength: 'Strength',
-  concentration: 'Concentration',
-  deflection: 'Deflection',
-  healing: 'Healing',
-  tireless: 'Tireless',
-  engineering: 'Engineering',
-  history: 'History',
-  investigate: 'Investigate',
-  programming: 'Programming',
-  bluff: 'Bluff/Diplomacy',
-  perception: 'Perception',
-  soothe: 'Soothe',
-  streetwise: 'Streetwise',
   acrobatics: 'Acrobatics',
-  perform: 'Perform',
-  sleightOfHand: 'Sleight of Hand',
+  athletics: 'Athletics',
+  combat: 'Combat',
+  intimidate: 'Intimidate',
   stealth: 'Stealth',
+  survival: 'Survival',
+  generalEducation: 'General Edu.',
+  medicineEducation: 'Medicine Edu.',
+  occultEducation: 'Occult Edu.',
+  pokemonEducation: `${POKEMON_STRING} Edu.`,
+  technologyEducation: 'Technology Edu.',
+  guile: 'Guile',
+  perception: 'Perception',
+  charm: 'Charm',
+  command: 'Command',
+  focus: 'Focus',
+  intuition: 'Intuition',
 }
 
-export const POKEMON_STRING = 'Pokémon';

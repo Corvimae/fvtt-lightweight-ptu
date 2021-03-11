@@ -3,7 +3,6 @@ export function handleChangeInputDelta(data, event) {
   const input = event.target;
   const value = input.value;
 
-  console.log(input, value);
   
   if (['+', '-'].includes(value[0])) {
     let delta = parseFloat(value);

@@ -3,18 +3,18 @@ import { fetchPokemonData } from '../utils/pokemonUtils.js';
 export function restartPokemonStatSyncInterval() {
   if (!game.user.isGM) return;
 
-  if (game.pta.statSyncIntervalId) clearInterval(game.pta.statSyncIntervalId);
+  if (game.ptu.statSyncIntervalId) clearInterval(game.ptu.statSyncIntervalId);
 
   syncAllPokemonStatValues();
 
-  game.pta.statSyncIntervalId = setInterval(
+  game.ptu.statSyncIntervalId = setInterval(
     syncAllPokemonStatValues,
-    game.settings.get('pta', 'statSyncInterval') * 1000
+    game.settings.get('ptu', 'statSyncInterval') * 1000
   );
 }
 
 export async function syncAllPokemonStatValues() {
-  if (CONFIG.debug.pta.logSync) console.info('[PTA] Syncing Pokemon stat values...');
+  if (CONFIG.debug.ptu.logSync) console.info('[PTU] Syncing Pokemon stat values...');
 
   const pokemonWithSheets = game.actors.entries.filter(actor => actor.data.type === 'pokemon' && actor.data.data.sheetID);
 
@@ -34,7 +34,7 @@ export async function syncPokemonStatValues(sheetID) {
   const actor = game.actors.entries.find(actor => actor.data.type === 'pokemon' && actor.data.data.sheetID === sheetID);
   
   if (!actor) {
-    console.info(`[PTA] Unable to sync sheet data with ID ${sheetID}: sheet does not exist.`);
+    console.info(`[PTU] Unable to sync sheet data with ID ${sheetID}: sheet does not exist.`);
 
     return;
   }

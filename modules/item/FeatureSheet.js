@@ -9,7 +9,7 @@ export default class FeatureSheet extends ItemSheet {
     return mergeObject(
       super.defaultOptions,
       {
-        classes: ["pta", "sheet", "item", "feature"],
+        classes: ["ptu", "sheet", "item", "feature"],
         width: 500,
         height: 550,
         tabs: [
@@ -24,7 +24,7 @@ export default class FeatureSheet extends ItemSheet {
   }
 
   get template() {
-    return 'systems/pta/templates/sheets/items/feature.html';
+    return 'systems/fvtt-lightweight-ptu/templates/sheets/items/feature.html';
   }
 
   getData() {        

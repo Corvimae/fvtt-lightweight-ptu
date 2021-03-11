@@ -27,6 +27,24 @@
       </div>
       <div class="char-classes">
         <input name="data.details.classes" type="text" value="{{data.details.classes}}" placeholder="Pokemon Trainer"/>
+        <div class="ap-container">
+          <div class="ap-text">AP</div>
+          <div class="char-ap">
+            <div class="attribute-value">
+              <input
+                name="data.resources.actionPoints.value"
+                type="text"
+                value="{{data.resources.actionPoints.value}}"
+                data-dtype="Number"
+                placeholder="10"
+              />
+            </div>
+            <div class="ap-maximum">
+              <span class="sep"> / </span>
+              <label>{{data.resources.actionPoints.max}}</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -44,9 +62,9 @@
             data-dtype="Number"
             placeholder="10"
           />
-          <div class="modifier-value {{stat.modifierCSSClass}}">
+          <!-- <div class="modifier-value {{stat.modifierCSSClass}}">
             {{numberFormat stat.modifier decimals=0 sign=true}}
-          </div>
+          </div> -->
         </div>
       </li>
       {{/each}}
@@ -57,31 +75,41 @@
   <nav class="sheet-navigation tabs" data-group="primary">
     <a class="item" data-tab="skills">Skills & Details</a>
     <a class="item" data-tab="features">Features</a>
+    <a class="item" data-tab="capabilities">Capabilities</a>
+    <a class="item" data-tab="edges">Edges</a>
     <a class="item" data-tab="inventory">Inventory</a>
-    <a class="item" data-tab="background">League Application</a>
+    <a class="item" data-tab="background">Biography</a>
     <a class="item icon" data-tab="options"><i class="fa fa-cog"></i></a>
   </nav>
 
   <div class="sheet-content">
     {{!-- Skills --}}
     <div class="tab skills" data-group="primary" data-tab="skills">
-      {{> "systems/pta/templates/sheets/actors/partials/skills.html"}}
-    </div>
-
-    <div class="tab skills" data-group="primary" data-tab="background">
-      {{> "systems/pta/templates/sheets/actors/partials/background.html"}}
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/skills.html"}}
     </div>
 
     <div class="tab features flexcol" data-group="primary" data-tab="features">
-      {{> "systems/pta/templates/sheets/actors/partials/features.html"}}
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/features.html"}}
+    </div>
+
+    <div class="tab capabilities flexcol" data-group="primary" data-tab="capabilities">
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/capabilities.html"}}
+    </div>
+
+    <div class="tab capabilities flexcol" data-group="primary" data-tab="edges">
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/edges.html"}}
     </div>
 
     <div class="tab features flexcol" data-group="primary" data-tab="inventory">
-      {{> "systems/pta/templates/sheets/actors/partials/inventory.html"}}
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/inventory.html"}}
     </div>
 
     <div class="tab features flexcol" data-group="primary" data-tab="options">
-      {{> "systems/pta/templates/sheets/actors/partials/options.html"}}
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/options.html"}}
+    </div>
+    
+    <div class="tab background" data-group="primary" data-tab="background">
+      {{> "systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/background.html"}}
     </div>
   </div>
 </form>

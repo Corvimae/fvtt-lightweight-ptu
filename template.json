@@ -70,130 +70,117 @@
         "classes": "",
         "badges": 0,
         "money": 0,
+        "experience": 0,
         "caughtPokemon": 0
       },
-      "movement": {
-        "overland": 5,
-        "surface": 4,
-        "underwater": 3
+      "capabilityBonuses": {
+        "overland": 0,
+        "swim": 0,
+        "power": 0,
+        "throwingRange": 0,
+        "longJump": 0,
+        "highJump": 0
       },
       "skills": {
-        "hp": {
-          "items": {
-            "breathless": {
-              "trained": false
-            },
-            "fasting": {
-              "trained": false
-            },
-            "endurance": {
-              "trained": false
-            },
-            "resistant": {
-              "trained": false
-            }
-          }
-        },
-        "atk": {
-          "items": {
-            "browbeat": {
-              "trained": false
-            },
-            "jump": {
-              "trained": false
-            },
-            "sprint": {
-              "trained": false
-            },
-            "strength": {
-              "trained": false
-            }
-          }
-        },
-        "def": {
-          "items": {
-            "concentration": {
-              "trained": false
-            },
-            "deflection": {
-              "trained": false
-            },
-            "healing": {
-              "trained": false
-            },
-            "tireless": {
-              "trained": false
-            }
-          }
-        },
-        "spatk": {
-          "items": {
-            "engineering": {
-              "trained": false
-            },
-            "history": {
-              "trained": false
-            },
-            "investigate": {
-              "trained": false
-            },
-            "programming": {
-              "trained": false
-            }
-          }
-        },
-        "spdef": {
-          "items": {
-            "bluff": {
-              "trained": false
-            },
-            "perception": {
-              "trained": false
-            },
-            "soothe": {
-              "trained": false
-            },
-            "streetwise": {
-              "trained": false
-            }
-          }
-        },
-        "spd": {
+        "body": {
           "items": {
             "acrobatics": {
-              "trained": false
+              "rank": 2,
+              "bonus": 0
             },
-            "perform": {
-              "trained": false
+            "athletics": {
+              "rank": 2,
+              "bonus": 0
             },
-            "sleightOfHand": {
-              "trained": false
+            "combat": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "intimidate": {
+              "rank": 2,
+              "bonus": 0
             },
             "stealth": {
-              "trained": false
+              "rank": 2,
+              "bonus": 0
+            },
+            "survival": {
+              "rank": 2,
+              "bonus": 0
+            }
+          }
+        },
+        "mind": {
+          "items": {
+            "generalEducation": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "medicineEducation": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "occultEducation": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "pokemonEducation": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "technologyEducation": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "guile": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "perception": {
+              "rank": 2,
+              "bonus": 0
+            }
+          }
+        },
+        "spirit": {
+          "items": {
+            "charm": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "command": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "focus": {
+              "rank": 2,
+              "bonus": 0
+            },
+            "intuition": {
+              "rank": 2,
+              "bonus": 0
             }
           }
         }
       },
       "background": {
         "age": 18,
-        "dateOfBirth": "01/01/1970",
         "gender": "",
+        "background": "",
         "height": "",
         "weight": "",
-        "pronouns": "",
-        "pronunciationOfName": "",
-        "regionOfResidence": "",
-        "personalBio": "",
-        "motive": "",
-        "roleModel": "",
-        "aspiration": "",
-        "signatureSomething": "",
-        "dream": "",
-        "favoriteColor": "",
-        "favoritePokemon": "",
-        "favoriteType": "",
-        "favoriteFood": ""
+        "description": "",
+        "notes": ""
+      },
+      "resources": {
+        "actionPoints": {
+          "value": 0,
+          "max": 0,
+          "apMaxBonus": 0
+        },
+        "injuries": {
+          "value": 0
+        }
       }
     },
     "pokemon": {
@@ -209,32 +196,39 @@
     }
   },
   "Item": {
-    "types": ["move", "capability", "feature", "ability", "carriable"],
+    "types": ["move", "capability", "feature", "edge", "ability", "carriable"],
     "move": {
       "type": "",
       "frequency": "",
       "range": "",
       "damage": "",
-      "accuracy": 0,
+      "ac": 0,
       "attackType": "",
       "effects": ""
     },
     "capability": {
+      "rank": 0,
       "description": ""
     },
     "ability": {
       "frequency": "",
       "description": ""
     },
+    "edge": {
+      "rank": 1,
+      "description": ""
+    },
     "feature": {
       "frequency": "Daily",
       "trainerClass": "",
       "target": "",
+      "tags": "",
       "additionalUseLevelCount": 0,
       "description": "",
       "isLeagueLegal": true,
       "isReaction": false,
       "hasUses": true,
+      "totalUses": 1,
       "uses": 0
     },
     "carriable": {

@@ -1,0 +1,74 @@
+<div class="capability-list">
+  <div class="list-subheader">
+    <div class="capability-list-subheader-name">Basic Capabilities</div>
+    <div></div>
+  </div>
+  <div class="item grid-row capability-row basic-capability" data-special-item-key="capability-overland">
+    <a class="item-list-name">Overland</a>
+    <div class="item-value capability-value basic-capability-value">
+      {{data.derivedCapabilities.overland}}
+    </div>
+  </div>
+  <div class="item grid-row capability-row basic-capability" data-special-item-key="capability-swim">
+    <a class="item-list-name">Swim</a>
+    <div class="item-value capability-value basic-capability-value">
+      {{data.derivedCapabilities.swim}}
+    </div>
+  </div>
+
+  <div class="item grid-row capability-row basic-capability" data-special-item-key="capability-power">
+    <a class="item-list-name">Power</a>
+    <div class="item-value capability-value basic-capability-value">
+      {{data.derivedCapabilities.power}}
+    </div>
+  </div>
+
+  <div class="item grid-row capability-row basic-capability" data-special-item-key="capability-throwing-range">
+    <a class="item-list-name">Throwing Range</a>
+    <div class="item-value capability-value basic-capability-value">
+      {{data.derivedCapabilities.throwingRange}}
+    </div>
+  </div>
+
+  <div class="item grid-row capability-row basic-capability" data-special-item-key="capability-long-jump">
+    <a class="item-list-name">Long Jump</a>
+    <div class="item-value capability-value basic-capability-value">
+      {{data.derivedCapabilities.longJump}}
+    </div>
+  </div>
+
+  <div class="item grid-row capability-row basic-capability" data-special-item-key="capability-high-jump">
+    <a class="item-list-name">High Jump</a>
+    <div class="item-value capability-value basic-capability-value">
+      {{data.derivedCapabilities.highJump}}
+    </div>
+  </div>
+
+  <div class="list-subheader">
+    <div class="capability-list-subheader-name with-divider">Special Capabilities</div>
+    <a class="item-create add-capability" title="Add Capability">
+      <i class="fa fa-plus"></i>
+      Add
+    </a>
+  </div>
+  {{#each data.capabilities as |capability|}}
+    <div class="item grid-row capability-row" data-item-id="{{capability._id}}">
+      <a class="item-list-name">{{capability.name}}</a>
+      <div class="item-value capability-value">
+        {{capability.data.rank}}
+      </div>
+      <div class="item-actions item-value">
+        {{#if ../owner}}
+        <div class="item-controls">
+          <a class="item-control edit-item" title='Edit'>
+            <i class="fas fa-edit"></i>
+          </a>
+          <a class="item-control delete-item" title='Delete'>
+            <i class="fas fa-trash"></i>
+          </a>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  {{/each}}
+</div>

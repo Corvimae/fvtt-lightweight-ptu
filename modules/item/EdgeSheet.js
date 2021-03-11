@@ -1,6 +1,6 @@
 import { handleChangeInputDelta } from "../utils/sheetUtils.js";
 
-export default class TokenSheet extends ActorSheet {
+export default class EdgeSheet extends ItemSheet {
   constructor(...args) {
     super(...args);
   }
@@ -9,20 +9,20 @@ export default class TokenSheet extends ActorSheet {
     return mergeObject(
       super.defaultOptions,
       {
-        classes: ["ptu", "sheet", "actor", "token"],
+        classes: ["ptu", "sheet", "item", "edge"],
         width: 600,
-        height: 130,
+        height: 350,
       },
     );
   }
 
   get template() {
-    return 'systems/fvtt-lightweight-ptu/templates/sheets/actors/token.html';
+    return 'systems/fvtt-lightweight-ptu/templates/sheets/items/edge.html';
   }
 
   activateListeners(html) {
     if (this.isEditable) {
-      const handleNumericChangeEvent = event => handleChangeInputDelta(this.actor.data, event);
+      const handleNumericChangeEvent = event => handleChangeInputDelta(this.item.data, event);
 
       html.find('input[data-dtype="Number"]').change(handleNumericChangeEvent);
     }
@@ -30,11 +30,12 @@ export default class TokenSheet extends ActorSheet {
     super.activateListeners(html);
   }
 
-  getData() {  
+  getData() {        
     return {
       editable: this.isEditable,
       owner: this.entity.owner,
-      data: this.actor.data.data,
+      item: this.item,
+      data: this.item.data.data,
     };
   }
 }

@@ -9,7 +9,7 @@ export default class CarriableSheet extends ItemSheet {
     return mergeObject(
       super.defaultOptions,
       {
-        classes: ["pta", "sheet", "item", "carriable"],
+        classes: ["ptu", "sheet", "item", "carriable"],
         width: 600,
         height: 350,
       },
@@ -17,7 +17,7 @@ export default class CarriableSheet extends ItemSheet {
   }
 
   get template() {
-    return 'systems/pta/templates/sheets/items/carriable.html';
+    return 'systems/fvtt-lightweight-ptu/templates/sheets/items/carriable.html';
   }
 
   activateListeners(html) {

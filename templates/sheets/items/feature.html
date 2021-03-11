@@ -38,6 +38,15 @@
           />
         </div>
         <div class="item-details-row">
+          <label>Tags</label>
+          <input
+            name="data.tags"
+            type="text"
+            value="{{data.tags}}"
+            placeholder=""
+          />
+        </div>
+        <div class="item-details-row">
           <label>Description</label>
           <div class="editor-container">
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
@@ -73,12 +82,12 @@
       </div>
       {{#if data.hasUses}}
       <div class="form-group">
-        <label>Additional use every X levels</label>
+        <label>Total uses</label>
         <div class="form-fields">
           <input
-            name="data.additionalUseLevelCount" 
+            name="data.totalUses" 
             type="text"
-            value="{{data.additionalUseLevelCount}}"
+            value="{{data.totalUses}}"
             data-dtype="Number"
             placeholder="0"
           />

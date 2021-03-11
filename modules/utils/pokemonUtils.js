@@ -45,5 +45,5 @@ export function calculateLevel(experience) {
 }
 
 export function calculateCombatStageMultiplier(stages) {
-  return stages === 0 ? 1 : (stages < 0 ? 1 - (Math.abs(stages) * 0.125) : 1 + (stages * 0.25));
+  return stages === 0 ? 1 : (stages < 0 ? 1 - (Math.abs(stages) * 0.1) : 1 + (stages * 0.2));
 }

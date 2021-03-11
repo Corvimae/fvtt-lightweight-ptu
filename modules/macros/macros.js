@@ -1,6 +1,6 @@
 import { syncPokemonStatValues } from '../processes/syncPokemonStatValues.js';
 import { calculateCombatStageMultiplier } from '../utils/pokemonUtils.js';
-import { getStatForSkill, calculateSkillModifier, calculateStatModifier } from '../utils/trainerUtils.js';
+import { getSkillType, calculateStatModifier } from '../utils/trainerUtils.js';
 import { SKILL_NAMES, STAT_FULL_NAMES } from '../utils/constants.js';
 
 export async function rollMetronome() {
@@ -16,7 +16,7 @@ export async function rollMetronome() {
     type: CONST.CHAT_MESSAGE_TYPES.OTHER,
   });
 
-  game.pta.macros.rollMove(
+  game.ptu.macros.rollMove(
     selectedMove.data.name,
     selectedMove.data.data.type,
     selectedMove.data.data.frequency,
@@ -37,7 +37,7 @@ export async function rollMove(name, type, frequency, range, damage, accuracy, a
     await syncPokemonStatValues(actor.data.data.sheetID);
   } catch (error) {
     ui.notifications.warn('Unable to sync Pokemon data. Move damage may not be correct.');
-    console.warn('[PTA] Unable to sync Pokemon data for move macro', error);
+    console.warn('[PTU] Unable to sync Pokemon data for move macro', error);
   }
 
   // Get updated actor data.
@@ -47,7 +47,7 @@ export async function rollMove(name, type, frequency, range, damage, accuracy, a
   
   const [_, dice, dieSize, flat] = /([0-9]+)d([0-9]+)\s*\+\s*([0-9]+)/.exec(damage) ?? [0, 0, 0, 0];
 
-  const content = await renderTemplate('/systems/pta/templates/macros/move.html', {
+  const content = await renderTemplate('/systems/ptu/templates/macros/move.html', {
     name,
     type,
     frequency,
@@ -60,7 +60,7 @@ export async function rollMove(name, type, frequency, range, damage, accuracy, a
     attackTypeName: attackType === 0 ? 'Physical' : 'Special',
     hasEffects: effects !== '-' && effects.trim().length > 0,
     hasValidAttackRoll: dice !== 0 && dieSize !== 0 && flat !== 0 && attackType !== 2,
-    shouldRollDamage: game.settings.get('pta', 'rollDamageDice'),
+    shouldRollDamage: game.settings.get('ptu', 'rollDamageDice'),
     hasAccuracyCheck: range.indexOf('No Target') === -1 || attackType !== 2,
     accuracyCheck: accuracyCheck.rolls[0].result,
     relevantStatValue: attackType === 0 ? '@stats.atk.value' : '@stats.spatk.value',
@@ -81,20 +81,21 @@ export async function rollMove(name, type, frequency, range, damage, accuracy, a
 export function buildCommandForMove(move) {
   switch(move.name) {
     case 'Metronome':
-      return 'game.pta.macros.rollMetronome()';
+      return 'game.ptu.macros.rollMetronome()';
       
     default:
-      return `game.pta.macros.rollMove('${move.name}', '${move.data.type}', '${move.data.frequency}', '${move.data.range}', '${move.data.damage}', ${move.data.accuracy}, ${move.data.attackType}, '${move.data.effects.replace(/'/g, '\\\'')}')`;
+      return `game.ptu.macros.rollMove('${move.name}', '${move.data.type}', '${move.data.frequency}', '${move.data.range}', '${move.data.damage}', ${move.data.accuracy}, ${move.data.attackType}, '${move.data.effects.replace(/'/g, '\\\'')}')`;
   }
 }
 
 export async function rollSkill(actorId, skillName) {
   const actor = game.actors.get(actorId);
 
-  const modifierValue = calculateSkillModifier(actor, skillName);
+  const associatedStat = getSkillType(actor, skillName);
+  const skillData = actor.data.data.skills[associatedStat].items[skillName];
 
   await ChatMessage.create({
-    content: `<div class="larger-chat-message">${actor.name} attempts ${SKILL_NAMES[skillName]}... [[1d20 + ${modifierValue}]]!</div>`,
+    content: `<div class="larger-chat-message">${actor.name} attempts ${SKILL_NAMES[skillName]}... [[${skillData.rank}d6 + ${skillData.bonus}]]!</div>`,
     speaker: ChatMessage.getSpeaker({ actor }),
     type: CONST.CHAT_MESSAGE_TYPES.OTHER,
   });

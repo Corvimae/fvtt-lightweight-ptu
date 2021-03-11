@@ -1,6 +1,6 @@
 import { STAT_SHORT_NAMES, STAT_FULL_NAMES, SKILL_NAMES } from '../utils/constants.js';
 import { getTagsForItem } from '../utils/items.js';
-import { getStatForSkill, calculateStatModifier, calculateSkillModifier } from '../utils/trainerUtils.js';
+import { getSkillType, calculateStatModifier, getItemDescription } from '../utils/trainerUtils.js';
 import { rollSkill, rollStat } from '../macros/macros.js';
 import { handleChangeInputDelta } from '../utils/sheetUtils.js';
 
@@ -13,8 +13,8 @@ export default class TrainerSheet extends ActorSheet {
     return mergeObject(
       super.defaultOptions,
       {
-        classes: ["pta", "sheet", "actor", "trainer"],
-        width: 672,
+        classes: ["ptu", "sheet", "actor", "trainer"],
+        width: 780,
         height: 736,
         tabs: [
           {
@@ -28,7 +28,7 @@ export default class TrainerSheet extends ActorSheet {
   }
 
   get template() {
-    return 'systems/pta/templates/sheets/actors/trainer.html';
+    return 'systems/fvtt-lightweight-ptu/templates/sheets/actors/trainer.html';
   }
 
   getData() {        
@@ -44,8 +44,6 @@ export default class TrainerSheet extends ActorSheet {
     html.find('.item .item-list-name').click(this.handleItemSummary.bind(this));
 
     if (this.isEditable) {
-      html.find('.trained-toggle').click(this.handleSkillTrainedToggle.bind(this));
-
       html.find('.add-feature').click(this.handleAddFeature.bind(this));
 
       html.find('.edit-item').click(this.handleEditItem.bind(this));
@@ -63,6 +61,10 @@ export default class TrainerSheet extends ActorSheet {
       html.find('.add-carriable').click(this.handleAddCarriable.bind(this));
 
       html.find('.add-carriable-category').click(this.handleAddCarriableCategory.bind(this));
+
+      html.find('.add-capability').click(this.handleAddCapability.bind(this));
+      
+      html.find('.add-edge').click(this.handleAddEdge.bind(this));
 
       html.find('.money-modify-button.increment').click(this.handleIncrementMoney.bind(this));
       html.find('.money-modify-button.decrement').click(this.handleDecrementMoney.bind(this));
@@ -95,7 +97,7 @@ export default class TrainerSheet extends ActorSheet {
   }
 
   insertDerivedData(data) {
-    return this.processItems(this.insertDerivedSkillData(this.insertDerivedStatData(data)));
+    return this.processItems(this.insertDerivedStatData(this.insertDerivedCapabilityData(data)));
   }
 
   processItems(data) {
@@ -115,7 +117,6 @@ export default class TrainerSheet extends ActorSheet {
             ...feature,
             data: {
               ...feature.data,
-              maxUses: this.calculateFeatureUses(feature, data),
               leagueLegalLabel: feature.data.isLeagueLegal ? 'Legal' : 'Illegal'
             },
           },
@@ -132,15 +133,43 @@ export default class TrainerSheet extends ActorSheet {
       };
     }, {});
 
+    const capabilities = items.filter(item => item.type === 'capability').reduce((acc, capability) => [
+      ...acc,
+      capability,
+    ], []);
+
+    const edges = items.filter(item => item.type === 'edge').reduce((acc, edge) => [
+      ...acc,
+      edge,
+    ], []);
+
     return {
       ...data,
       features,
       carriables,
+      capabilities,
+      edges,
     };
   }
 
   calculateFeatureUses(feature, actorData) {
     return feature.data.additionalUseLevelCount > 0 ? 1 + Math.floor(actorData.level / feature.data.additionalUseLevelCount) : 1;
+  }
+
+  insertDerivedCapabilityData(data) {
+    const overland = 3 + Math.floor((data.skills.body.items.athletics.rank + data.skills.body.items.acrobatics.rank) / 2) + data.capabilityBonuses.overland;
+
+    return {
+      ...data,
+      derivedCapabilities: {
+        overland,
+        swim: Math.floor(overland / 2) + data.capabilityBonuses.swim,
+        power: 4 + (data.skills.body.items.athletics.rank >= 3 ? 1 : 0) + (data.skills.body.items.combat.rank >= 3 ? 1 : 0) + data.capabilityBonuses.power,
+        throwingRange: 4 + data.skills.body.items.athletics.rank + data.capabilityBonuses.throwingRange,
+        longJump: Math.round(data.skills.body.items.athletics.rank / 2) + data.capabilityBonuses.longJump,
+        highJump: (data.skills.body.items.acrobatics.rank >= 4 ? 1 : 0) + (data.skills.body.items.acrobatics.rank >= 6 ? 1 : 0) + data.capabilityBonuses.highJump,
+      }
+    } 
   }
 
   insertDerivedStatData(data) {
@@ -163,28 +192,6 @@ export default class TrainerSheet extends ActorSheet {
     };
   }
 
-  insertDerivedSkillData(data) {
-    return {
-      ...data,
-      skills: Object.entries(data.skills).reduce((acc, [stat, statSkillData]) => ({
-        ...acc,
-        [stat]: {
-          ...statSkillData,
-          statName: STAT_FULL_NAMES[stat],
-          items: Object.entries(data.skills[stat].items).reduce((acc, [skill, skillData]) => ({
-            ...acc,
-            [skill]: {
-              ...skillData,
-              icon: `<i class="${skillData.trained ? 'fas fa-check' : 'far fa-circle'}"></i>`,
-              modifier: calculateSkillModifier(this.actor, skill),
-              skillName: SKILL_NAMES[skill],
-            },
-          }), {}),
-        },
-      }), {}),
-    };
-  }
-
   getModifierCSSClass(modifier) {
     if (modifier <= -4) return 'very-low';
     if (modifier < 0) return 'low';
@@ -193,20 +200,6 @@ export default class TrainerSheet extends ActorSheet {
   
     return 'high'
   }
-
-
-  handleSkillTrainedToggle(event) {
-    event.preventDefault();
-
-    const skill = event.currentTarget.parentElement.getAttribute('data-skill');
-    const associatedStat = getStatForSkill(this.actor, skill);
-    const currentTrainedValue = this.actor.data.data.skills[associatedStat].items[skill].trained;
-
-    this.actor.update({
-      [`data.skills.${associatedStat}.items.${skill}.trained`]: !currentTrainedValue,
-    });
-  }
-
   
   async handleDragSkillEnd(event) {
     const skill = event.target.getAttribute('data-skill');
@@ -223,10 +216,10 @@ export default class TrainerSheet extends ActorSheet {
     const macro = await Macro.create({
       name: `${SKILL_NAMES[skill]} (${this.actor.name})`,
       type: 'script',
-      command: `game.pta.macros.rollSkill('${this.actor.id}', '${skill}')`,
+      command: `game.ptu.macros.rollSkill('${this.actor.id}', '${skill}')`,
       flags: {
-        'pta.skill': skill,
-        'pta.trainer': this.actor.id,
+        'ptu.skill': skill,
+        'ptu.trainer': this.actor.id,
       },
     });
   
@@ -239,10 +232,10 @@ export default class TrainerSheet extends ActorSheet {
     const macro = await Macro.create({
       name: `${STAT_FULL_NAMES[stat]} (${this.actor.name})`,
       type: 'script',
-      command: `game.pta.macros.rollStat('${this.actor.id}', '${stat}')`,
+      command: `game.ptu.macros.rollStat('${this.actor.id}', '${stat}')`,
       flags: {
-        'pta.stat': stat,
-        'pta.trainer': this.actor.id,
+        'ptu.stat': stat,
+        'ptu.trainer': this.actor.id,
       },
     });
   
@@ -366,7 +359,7 @@ export default class TrainerSheet extends ActorSheet {
       .flatMap(x => x)
       .filter(feature => feature.data.hasUses)
       .forEach(feature => {
-        this.actor.getOwnedItem(feature._id).update({ 'data.uses': feature.data.maxUses });
+        this.actor.getOwnedItem(feature._id).update({ 'data.uses': feature.data.totalUses });
       });
   }
 
@@ -381,6 +374,24 @@ export default class TrainerSheet extends ActorSheet {
       data: {
         category,
       },
+    }, { renderSheet: true });
+  }
+
+  async handleAddCapability(event) {
+    event.preventDefault();
+
+    return await this.actor.createEmbeddedEntity('OwnedItem', {
+      name: 'New Capability',
+      type: 'capability',
+    }, { renderSheet: true });
+  }
+  
+  async handleAddEdge(event) {
+    event.preventDefault();
+
+    return await this.actor.createEmbeddedEntity('OwnedItem', {
+      name: 'New Edge',
+      type: 'edge',
     }, { renderSheet: true });
   }
   
@@ -429,10 +440,10 @@ export default class TrainerSheet extends ActorSheet {
 
       summary.slideUp(200, () => summary.remove());
     } else {
-      let div = $(`<div class="item-summary">${item.data.data.description}</div>`);
+      let div = $(`<div class="item-summary">${getItemDescription(this.actor, li)}</div>`);
       let props = $(`<div class="item-properties"></div>`);
 
-      const tags = getTagsForItem(item);
+      const tags = item ? getTagsForItem(item) : [];
 
       tags.forEach(p => props.append(`<span class="tag">${p}</span>`));
       div.append(props);

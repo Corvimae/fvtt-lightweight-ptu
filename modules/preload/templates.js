@@ -1,17 +1,21 @@
 export const preloadTemplates = async function() {
   const templatePaths = [
-    'systems/pta/templates/apps/pokemonManagerLogin.html',
-    'systems/pta/templates/macros/move.html',
-    'systems/pta/templates/sheets/actors/token.html',
-    'systems/pta/templates/sheets/actors/trainer.html',
-    'systems/pta/templates/sheets/actors/partials/skills.html',
-    'systems/pta/templates/sheets/actors/partials/background.html',
-    'systems/pta/templates/sheets/actors/partials/features.html',
-    'systems/pta/templates/sheets/actors/partials/inventory.html',
-    'systems/pta/templates/sheets/actors/partials/options.html',
-    'systems/pta/templates/sheets/items/carriable.html',
-    'systems/pta/templates/sheets/items/feature.html',
-    'systems/pta/templates/sheets/items/move.html',
+    'systems/fvtt-lightweight-ptu/templates/apps/pokemonManagerLogin.html',
+    'systems/fvtt-lightweight-ptu/templates/macros/move.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/token.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/trainer.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/skills.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/background.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/capabilities.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/edges.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/features.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/inventory.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/actors/partials/options.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/items/carriable.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/items/capability.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/items/edge.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/items/feature.html',
+    'systems/fvtt-lightweight-ptu/templates/sheets/items/move.html',
   ]
 
   // Load the template parts

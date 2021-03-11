@@ -1,8 +1,8 @@
-.pta.sheet .editor {
+.ptu.sheet .editor {
   height: 100%;
 }
-.pta.sheet .editor .tox-toolbar-overlord,
-.pta.sheet .editor .tox-toolbar__primary {
+.ptu.sheet .editor .tox-toolbar-overlord,
+.ptu.sheet .editor .tox-toolbar__primary {
   background: none;
 }
 
@@ -81,8 +81,47 @@
 }
 
 .char-classes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin: 0.25rem 0.5rem;
   font-size: 1.25rem;
+}
+
+.char-classes > input {
+  min-width: 0;
+  flex-grow: 1;
+  align-self: stretch;
+}
+
+.ap-container {
+  display: flex;
+  align-items: center;
+  border-left: 2px groove #eeede0;
+  padding-left: 1rem;
+  margin-left: 1rem;
+}
+
+.char-ap {
+  display: flex;
+  width: 5rem;
+  flex-direction: row;
+  line-height: 24px;
+  margin-left: 0.5rem;
+}
+
+.char-ap input {
+  font-size: 1.25rem;
+  width: 2rem;
+  height: 1.5rem;
+  text-align: right;
+}
+
+.ap-maximum {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  color: #7a7971;
+  align-self: center;
 }
 
 .header-bio {
@@ -232,16 +271,31 @@
 .skill-name {
   margin-left: 0.5rem;
   font-size: 1rem;
+  white-space: nowrap;
 }
 
-.skill-modifier {
+
+.skill-roll {
+  display: grid;
+  grid-template-columns: 1fr max-content 4rem;
   margin-left: auto;
-  color: #7a7971;
-  font-weight: 400;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
-.skill-modifier.hidden {
-  display: none;
+.skill-roll input {
+  font-weight: 700;
+  color: #191813;
+}
+
+.skill-roll .skill-ranks {
+  text-align: right;
+}
+
+.skill-roll .skill-roll-text {
+  display: flex;
+  align-items: center;
+  color: #333;
 }
 
 .sheet-navigation {
@@ -265,7 +319,7 @@
   padding: 0.25rem 0.5rem;
 }
 
-.sheet-navigation .item:last-child {
+.sheet-navigation .item:last-of-type {
   border-right: none;
 }
 
@@ -314,13 +368,13 @@
   margin-bottom: 0.125rem;
 }
 
-.pta.sheet input[type="text"] {
+.ptu.sheet input[type="text"] {
   background: none;
   border: 1px solid transparent;
   padding: 0.125rem;
 }
 
-.pta.sheet input[type="text"]:hover {
+.ptu.sheet input[type="text"]:hover {
   border: 1px solid #333;
 }
 
@@ -389,32 +443,32 @@
   color: #990000;
 }
 
-.pta .form-group label {
+.ptu .form-group label {
   flex: 2;
   color: #444;
   font-weight: bold;
 }
 
-.pta .form-group .form-fields {
+.ptu .form-group .form-fields {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
 
-.pta.sheet.item .configuration input[type="text"],
-.pta.sheet.item .configuration select {
+.ptu.sheet.item .configuration input[type="text"],
+.ptu.sheet.item .configuration select {
   height: 24px;
   border: 1px solid #7a7971;
   background: rgba(0, 0, 0, 0.05);
   padding: 0.125rem 0.25rem;
 }
 
-.pta.sheet.item .configuration label.checkbox {
+.ptu.sheet.item .configuration label.checkbox {
   padding: 0;
 }
 
-.pta.sheet.item .configuration input[type="checkbox"] {
+.ptu.sheet.item .configuration input[type="checkbox"] {
   margin: 0;
 }
 
@@ -454,6 +508,12 @@
   grid-template-columns: 2.5rem 1fr repeat(3, max-content);
 }
 
+.capability-list,
+.edge-list {
+  display: grid;
+  grid-template-columns: 1fr minmax(2.5rem, max-content) max-content;
+}
+
 .grid-row {
   display: contents;
 }
@@ -462,8 +522,12 @@
   border-right: 1px solid #c9c7b8;
 }
 
-.grid-row > *{
+.grid-row > * {
   border-top: 1px solid #c9c7b8;
+}
+
+.grid-row > *:first-child {
+  border-left: 1px solid #c9c7b8;
 }
 
 .list-subheader + .grid-row > * {
@@ -520,6 +584,10 @@
   grid-column: span 2;
 }
 
+.capability-list-subheader-name {
+  grid-column: span 2;
+}
+
 .item-create i {
   margin-right: 0.25rem;
 }
@@ -555,7 +623,7 @@
   text-align: center;
 }
 
-.pta.sheet.actor .item-controls a {
+.ptu.sheet.actor .item-controls a {
   font-size: 12px;
   text-align: center;
   color: #7a7971;
@@ -641,6 +709,20 @@
   padding: 0.125rem 0.25rem;
 }
 
+.capability-row > *,
+.edge-row > * {
+  padding: 0.5rem 0.25rem;
+}
+
+.capability-row:last-child > *,
+.edge-row:last-child > * {
+  border-bottom: 1px solid #c9c7b8;
+}
+
+.basic-capability-value {
+  grid-column: span 2;
+}
+
 .inventory-list {
   display: grid;
   grid-template-columns: 2.5rem 1fr repeat(2, max-content);
@@ -658,7 +740,7 @@
   border-top: 1px solid #c9c7b8;
 }
 
-.pta .tag {
+.ptu .tag {
   display: inline-block;
   margin: 0 0.25rem 0 0;
   padding: 0 0.25rem;

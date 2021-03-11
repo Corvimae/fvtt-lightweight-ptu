@@ -1,0 +1,30 @@
+<div class="edge-list">
+  <div class="list-subheader">
+    <div class="edge-list-subheader-name with-divider">Edges</div>
+    <div class="list-subheader-column-name with-divider">Ranks</div>
+    <a class="item-create add-edge" title="Add Edge">
+      <i class="fa fa-plus"></i>
+      Add
+    </a>
+  </div>
+  {{#each data.edges as |edge|}}
+    <div class="item grid-row edge-row" data-item-id="{{edge._id}}">
+      <a class="item-list-name">{{edge.name}}</a>
+      <div class="item-value edge-value">
+        {{edge.data.rank}}
+      </div>
+      <div class="item-actions item-value">
+        {{#if ../owner}}
+        <div class="item-controls">
+          <a class="item-control edit-item" title='Edit'>
+            <i class="fas fa-edit"></i>
+          </a>
+          <a class="item-control delete-item" title='Delete'>
+            <i class="fas fa-trash"></i>
+          </a>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  {{/each}}
+</div>

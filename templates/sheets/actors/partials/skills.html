@@ -42,109 +42,84 @@
         />
       </li>
       <li class="header-detail-item">
-        <label>Height</label>
+        <label>Caught</label>
         <input
-          name="data.background.height" 
+          name="data.details.caughtPokmeon" 
           type="text"
-          value="{{data.background.height}}"
-          placeholder="?"
+          value="{{data.details.caughtPokmeon}}"
+          data-dtype="Number"
+          placeholder="0"
         />
       </li>
       <li class="header-detail-item">
-        <label>Weight</label>
+        <label>Experience</label>
         <input
-          name="data.background.weight" 
+          name="data.details.experience" 
           type="text"
-          value="{{data.background.weight}}"
-          placeholder="?"
+          value="{{data.details.experience}}"
+          data-dtype="Number"
+          placeholder="0"
         />
       </li>
     </ul>
   </div>
 </div>
 
-<div class="header-details">
-  <ul class="header-detail-list">
-    <li class="header-detail-item">
-      <label>Overland</label>
-      <input
-        name="data.movement.overland" 
-        type="text"
-        value="{{data.movement.overland}}"
-        data-dtype="Number"
-        placeholder="5"
-      />
-    </li>
-    <li class="header-detail-item">
-      <label>Surface</label>
-      <input
-        name="data.movement.surface" 
-        type="text"
-        value="{{data.movement.surface}}"
-        data-dtype="Number"
-        placeholder="4"
-      />
-    </li>
-    <li class="header-detail-item">
-      <label>Underwater</label>
-      <input
-        name="data.movement.underwater" 
-        type="text"
-        value="{{data.movement.underwater}}"
-        data-dtype="Number"
-        placeholder="3"
-      />
-    </li>
-    <li></li>
-    <li class="header-detail-item"></li>
-    <li class="header-detail-item">
-      <label>Caught</label>
-      <input
-        name="data.details.caughtPokmeon" 
-        type="text"
-        value="{{data.details.caughtPokmeon}}"
-        data-dtype="Number"
-        placeholder="0"
-      />
-    </li>
-  </ul>
-</div>
-
 <ul class="skill-list">
   <li class="skill-list-column">
     <div class="skill-list-item">
       <div class="skill-list-stat-header">
-        HP
+        Body
       </div>
-      {{#each data.skills.hp.items as |skillData skill|}}
-      <div class="skill-row" data-skill="{{skill}}">
-        <a class="trained-toggle skill-trained disabled" title="{{skill.hover}}">{{{skillData.icon}}}</a>
-        <a class="skill-name rollable disabled">{{skillData.skillName}}</a>
-        <div class="skill-modifier hidden">({{numberFormat skillData.modifier decimals=0 sign=true}})</div>
+      {{#each data.skills.body.items as |skillData skill|}}
+      <div class="skill-row skill-rollable" data-skill="{{skill}}">
+        <a class="skill-name rollable">{{skillName skill}}</a>
+        <div class="skill-roll">
+          <input
+            name="data.skills.body.items.{{skill}}.rank" 
+            class="skill-ranks"
+            type="text"
+            value="{{skillData.rank}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+          <div class="skill-roll-text">d6&nbsp;+</div>
+          <input
+            name="data.skills.body.items.{{skill}}.bonus" 
+            type="text"
+            value="{{skillData.bonus}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+        </div>
       </div>
       {{/each}}
     </div>
     <div class="skill-list-item">
       <div class="skill-list-stat-header">
-        Attack
+        Spirit
       </div>
-      {{#each data.skills.atk.items as |skillData skill|}}
+      {{#each data.skills.spirit.items as |skillData skill|}}
       <div class="skill-row skill-rollable" data-skill="{{skill}}">
-        <a class="trained-toggle skill-trained" title="{{skill.hover}}">{{{skillData.icon}}}</a>
-        <a class="skill-name rollable">{{skillData.skillName}}</a>
-        <div class="skill-modifier">({{numberFormat skillData.modifier decimals=0 sign=true}})</div>
-      </div>
-      {{/each}}
-    </div>
-    <div class="skill-list-item">
-      <div class="skill-list-stat-header">
-        Defense
-      </div>
-      {{#each data.skills.def.items as |skillData skill|}}
-      <div class="skill-row skill-rollable" data-skill="{{skill}}">
-        <a class="trained-toggle skill-trained" title="{{skill.hover}}">{{{skillData.icon}}}</a>
-        <a class="skill-name rollable">{{skillData.skillName}}</a>
-        <div class="skill-modifier">({{numberFormat skillData.modifier decimals=0 sign=true}})</div>
+        <a class="skill-name rollable ">{{skillName skill}}</a>
+        <div class="skill-roll">
+          <input
+            name="data.skills.spirit.items.{{skill}}.rank" 
+            class="skill-ranks"
+            type="text"
+            value="{{skillData.rank}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+          <div class="skill-roll-text">d6&nbsp;+</div>
+          <input
+            name="data.skills.spirit.items.{{skill}}.bonus" 
+            type="text"
+            value="{{skillData.bonus}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+        </div>
       </div>
       {{/each}}
     </div>
@@ -152,37 +127,29 @@
   <li class="skill-list-column">
     <div class="skill-list-item">
       <div class="skill-list-stat-header">
-        Special Attack
+        Mind
       </div>
-      {{#each data.skills.spatk.items as |skillData skill|}}
+      {{#each data.skills.mind.items as |skillData skill|}}
       <div class="skill-row skill-rollable" data-skill="{{skill}}">
-        <a class="trained-toggle skill-trained" title="{{skill.hover}}">{{{skillData.icon}}}</a>
-        <a class="skill-name rollable">{{skillData.skillName}}</a>
-        <div class="skill-modifier">({{numberFormat skillData.modifier decimals=0 sign=true}})</div>
-      </div>
-      {{/each}}
-    </div>
-    <div class="skill-list-item">
-      <div class="skill-list-stat-header">
-        Special Defense
-      </div>
-      {{#each data.skills.spdef.items as |skillData skill|}}
-      <div class="skill-row skill-rollable" data-skill="{{skill}}">
-        <a class="trained-toggle skill-trained" title="{{skill.hover}}">{{{skillData.icon}}}</a>
-        <a class="skill-name rollable">{{skillData.skillName}}</a>
-        <div class="skill-modifier">({{numberFormat skillData.modifier decimals=0 sign=true}})</div>
-      </div>
-      {{/each}}
-    </div>
-    <div class="skill-list-item">
-      <div class="skill-list-stat-header">
-        Speed
-      </div>
-      {{#each data.skills.spd.items as |skillData skill|}}
-      <div class="skill-row skill-rollable" data-skill="{{skill}}">
-        <a class="trained-toggle skill-trained" title="{{skill.hover}}">{{{skillData.icon}}}</a>
-        <a class="skill-name rollable">{{skillData.skillName}}</a>
-        <div class="skill-modifier">({{numberFormat skillData.modifier decimals=0 sign=true}})</div>
+        <a class="skill-name rollable">{{skillName skill}}</a>
+        <div class="skill-roll">
+          <input
+            name="data.skills.mind.items.{{skill}}.rank" 
+            class="skill-ranks"
+            type="text"
+            value="{{skillData.rank}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+          <div class="skill-roll-text">d6&nbsp;+</div>
+          <input
+            name="data.skills.mind.items.{{skill}}.bonus" 
+            type="text"
+            value="{{skillData.bonus}}"
+            data-dtype="Number"
+            placeholder="0"
+          />
+        </div>
       </div>
       {{/each}}
     </div>

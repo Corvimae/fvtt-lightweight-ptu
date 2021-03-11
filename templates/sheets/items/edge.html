@@ -1,0 +1,33 @@
+<form class="{{cssClass}} flexcol edge-page" autocomplete="off">
+  <div class="header-details">
+    <img class="profile" src="{{item.img}}" title="{{item.name}}" data-edit="img"/>
+    <div class="name-and-class">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="A New Edge"/>
+      </h1>
+    </div>
+  </div>
+
+  <div class="sheet-content item-content">
+    <div class="item-details two-column">
+      <div class="item-detail-sidebar">
+        <div class="item-detail-sidebar-item">
+          <label>Ranks</label>
+          <input
+            name="data.rank"
+            type="text"
+            value="{{data.rank}}"
+            data-dtype="Number"
+            placeholder="1"
+          />
+        </div>
+      </div>
+      <div class=edge-description item-details-row">
+        <label>Description</label>
+        <div class="editor-container">
+          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,7 +1,7 @@
 import { normalizePokemonName, fetchPokemonData } from '../utils/pokemonUtils.js';
 
 export function renderEntitySheetConfig(sheet, _element, entity) {
-  if(entity.object.type === 'pokemon' && Object.keys(entity.sheetClasses).indexOf('pta.PokemonManagerSheet') !== -1) {
+  if(entity.object.type === 'pokemon' && Object.keys(entity.sheetClasses).indexOf('fvtt-lightweight-ptu.PokemonManagerSheet') !== -1) {
     const form = sheet.element[0].querySelector('form');
 
     const sheetIDContainer = document.createElement('div');
@@ -13,6 +13,8 @@ export function renderEntitySheetConfig(sheet, _element, entity) {
     sheetIDLabel.textContent = 'Pokemon Manager ID';
 
     const sheetIDInput = document.createElement('input');
+
+    console.log(entity.object.data);
 
     sheetIDInput.type = 'text';
     sheetIDInput.value = entity.object.data.sheetID;
@@ -26,7 +28,7 @@ export function renderEntitySheetConfig(sheet, _element, entity) {
     sheet.element[0].style.height = '220px';
 
     const submitButton = form.querySelector('button[type=submit]');
-
+    
     submitButton.addEventListener('click', async () => {
       const rawSheetIDValue = parseInt(sheetIDInput.value, 10);
       const sheetIDValue = Number.isNaN(rawSheetIDValue) ? 0 : rawSheetIDValue;
@@ -36,8 +38,7 @@ export function renderEntitySheetConfig(sheet, _element, entity) {
       };
 
       // Get Pokemon data from the API.
-
-      if(sheetIDValue !== 0) {
+      if (sheetIDValue !== 0) {
         const pokemonData = await fetchPokemonData(sheetIDValue);
         
         updatedData.name = pokemonData.name;
@@ -50,7 +51,7 @@ export function renderEntitySheetConfig(sheet, _element, entity) {
         }
       }
 
-      actor.update(updatedData);
+      await actor.update(updatedData);
     });
   }
 }

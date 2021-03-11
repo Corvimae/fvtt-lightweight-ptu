@@ -10,7 +10,7 @@ export default class PokemonManagerSheet extends ActorSheet {
     return mergeObject(
       super.defaultOptions,
       {
-        classes: ["pta", "sheet", "actor", "pokemon-manager"],
+        classes: ["ptu", "sheet", "actor", "pokemon-manager"],
         width: 600,
         height: 350,
       },
@@ -18,7 +18,7 @@ export default class PokemonManagerSheet extends ActorSheet {
   }
 
   get template() {
-    return 'systems/pta/templates/sheets/actors/pokemonManager.html';
+    return 'systems/fvtt-lightweight-ptu/templates/sheets/actors/pokemonManager.html';
   }
 
   activateListeners(html) {
@@ -61,7 +61,7 @@ export default class PokemonManagerSheet extends ActorSheet {
     const hotbarPageOffset = (ui.hotbar.page - 1) * 10;
 
     pokemonData.moves.forEach((move, index) => {
-      const relevantMoveItem = game.items.find(item => item.data.type === 'move' && item.data.flags.pta?.dbId === move.definition.id);
+      const relevantMoveItem = game.items.find(item => item.data.type === 'move' && item.data.flags.ptu?.dbId === move.definition.id);
 
       if (relevantMoveItem) createMoveAtHotbarPosition(relevantMoveItem, hotbarPageOffset + index + 1);
     });

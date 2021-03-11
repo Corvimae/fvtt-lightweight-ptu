@@ -9,7 +9,7 @@ export default class MoveSheet extends ItemSheet {
     return mergeObject(
       super.defaultOptions,
       {
-        classes: ["pta", "sheet", "item", "move"],
+        classes: ["ptu", "sheet", "item", "move"],
         width: 600,
         height: 350,
       },
@@ -17,7 +17,7 @@ export default class MoveSheet extends ItemSheet {
   }
 
   get template() {
-    return 'systems/pta/templates/sheets/items/move.html';
+    return 'systems/ptu/templates/sheets/items/move.html';
   }
 
   getData() {        
