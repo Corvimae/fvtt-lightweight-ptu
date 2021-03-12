@@ -14,8 +14,6 @@ export function renderEntitySheetConfig(sheet, _element, entity) {
 
     const sheetIDInput = document.createElement('input');
 
-    console.log(entity.object.data);
-
     sheetIDInput.type = 'text';
     sheetIDInput.value = entity.object.data.sheetID;
     sheetIDInput['data-dtype'] = 'Number';

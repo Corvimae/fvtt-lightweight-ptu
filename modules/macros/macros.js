@@ -2,36 +2,52 @@ import { syncPokemonStatValues } from '../processes/syncPokemonStatValues.js';
 import { calculateCombatStageMultiplier } from '../utils/pokemonUtils.js';
 import { getSkillType, calculateStatModifier } from '../utils/trainerUtils.js';
 import { SKILL_NAMES, STAT_FULL_NAMES } from '../utils/constants.js';
+import { DAMAGE_BASE } from '../utils/damageUtils.js';
 
 export async function rollMetronome() {
+  const speaker = ChatMessage.getSpeaker();
+
   const allMoves = game.items.filter(item => item.data.type === 'move');
 
   const {_id: id} = allMoves[Math.floor(Math.random() * allMoves.length)];
 
   const selectedMove = await game.items.get(id);
 
+  if (!game.actors.get(speaker.actor)) {
+    ui.notifications.warn('No actor selected.');
+
+    return;
+  }
+
   await ChatMessage.create({
     content: `<div class="pokemon-move"><div class="pokemon-move-name">${ChatMessage.getSpeaker().alias} uses Metronome!</div></div>`,
-    speaker: ChatMessage.getSpeaker(),
+    flags: {
+      'ptu.messageType': 'move',
+      'ptu.moveOptions': {
+        type: 'normal',
+      },
+    },
+    speaker,
     type: CONST.CHAT_MESSAGE_TYPES.OTHER,
   });
 
-  game.ptu.macros.rollMove(
-    selectedMove.data.name,
-    selectedMove.data.data.type,
-    selectedMove.data.data.frequency,
-    selectedMove.data.data.range,
-    selectedMove.data.data.damage,
-    selectedMove.data.data.accuracy,
-    selectedMove.data.data.attackType,
-    selectedMove.data.data.effects.replace(/'/g, '\\\''),
-  );
+  game.ptu.macros.rollMove({ 
+    ...selectedMove.data.data,
+    name: selectedMove.data.name,
+    effects: selectedMove.data.data.effects.replace(/'/g, '\\\''),
+  });
 }
 
-export async function rollMove(name, type, frequency, range, damage, accuracy, attackType, effects, addedDamage = 0) {
+export async function rollMove({ name, type, frequency, range, damageBase, ac, damageType, effect, addedDamage = 0 }) {
   const speaker = ChatMessage.getSpeaker();
 
   let actor = game.actors.get(speaker.actor);
+
+  if (!actor) {
+    ui.notifications.warn('No actor selected.');
+
+    return;
+  }
 
   try {
     await syncPokemonStatValues(actor.data.data.sheetID);
@@ -43,36 +59,49 @@ export async function rollMove(name, type, frequency, range, damage, accuracy, a
   // Get updated actor data.
   actor = game.actors.get(speaker.actor);
 
-  const accuracyCheck = new Die({ faces: 20, number: 1}).evaluate();
+  const accuracyCheck = new Die({ faces: 20, number: 1 }).evaluate();
   
-  const [_, dice, dieSize, flat] = /([0-9]+)d([0-9]+)\s*\+\s*([0-9]+)/.exec(damage) ?? [0, 0, 0, 0];
+  const isDamaging = typeof damageBase === 'number' && damageBase >= 0;
+  const isStab =  actor.data.data.type1 === type || actor.data.data.type2 === type;
+  const { dieCount, dieSides, bonus } = isDamaging ? DAMAGE_BASE[damageBase + (isStab ? 2 : 0)] : {};
 
-  const content = await renderTemplate('/systems/ptu/templates/macros/move.html', {
+  const moveOptions = {
     name,
     type,
     frequency,
     range,
-    damage,
-    critDamage: `${dice * 2}d${dieSize} + ${flat * 2}`,
-    accuracy,
-    effects,
+    damageBase,
+    damage: `${dieCount}d${dieSides} + ${bonus}`,
+    critDamage: `${2 * dieCount}d${dieSides} + ${2 * bonus}`,
+    isStab,
+    ac,
+    effect,
     addedDamage,
-    attackTypeName: attackType === 0 ? 'Physical' : 'Special',
-    hasEffects: effects !== '-' && effects.trim().length > 0,
-    hasValidAttackRoll: dice !== 0 && dieSize !== 0 && flat !== 0 && attackType !== 2,
-    shouldRollDamage: game.settings.get('ptu', 'rollDamageDice'),
-    hasAccuracyCheck: range.indexOf('No Target') === -1 || attackType !== 2,
-    accuracyCheck: accuracyCheck.rolls[0].result,
-    relevantStatValue: attackType === 0 ? '@stats.atk.value' : '@stats.spatk.value',
-    combatStageMultiplier: calculateCombatStageMultiplier(attackType === 0 ? actor.data.data.stats.atk.combatStages.value : actor.data.data.stats.spatk.combatStages.value),
-    isCrit: accuracyCheck.rolls[0].result === 20,
-    isStab: actor.data.data.type1 === type || actor.data.data.type2 === type,
+    attackTypeName: damageType[0].toUpperCase() + damageType.substr(1),
+    moveTypeName: type[0].toUpperCase() + type.substr(1),
+    hasEffects: effect !== '-' && effect?.trim().length > 0,
+    hasValidAttackRoll: isDamaging,
+    shouldRollDamage: game.settings.get('fvtt-lightweight-ptu', 'rollDamageDice'),
+    hasAccuracyCheck: range.indexOf('No Target') === -1 || damageType !== 'status',
+    accuracyCheck: accuracyCheck.results[0].result,
+    relevantStatValue: damageType === 'physical' ? '@stats.atk.value' : '@stats.spatk.value',
+    combatStageMultiplier: calculateCombatStageMultiplier(damageType === 'physical' ? actor.data.data.stats.atk.combatStages.value : actor.data.data.stats.spatk.combatStages.value),
+    relevantStatBonus: damageType === 'physical' ? '@stats.atk.bonus' : '@stats.spatk.bonus',
+    isCrit: accuracyCheck.results[0].result === 20,
+  };
+
+  const content = await renderTemplate('/systems/fvtt-lightweight-ptu/templates/macros/move.html', {
+    ...moveOptions,
     speaker,
   });
 
   
   await ChatMessage.create({
     content,
+    flags: {
+      'ptu.messageType': 'move',
+      'ptu.moveOptions': moveOptions,
+    },
     speaker: ChatMessage.getSpeaker(),
     type: CONST.CHAT_MESSAGE_TYPES.OTHER,
   });
@@ -84,7 +113,7 @@ export function buildCommandForMove(move) {
       return 'game.ptu.macros.rollMetronome()';
       
     default:
-      return `game.ptu.macros.rollMove('${move.name}', '${move.data.type}', '${move.data.frequency}', '${move.data.range}', '${move.data.damage}', ${move.data.accuracy}, ${move.data.attackType}, '${move.data.effects.replace(/'/g, '\\\'')}')`;
+      return `game.ptu.macros.rollMove({ name: '${move.name}', type: '${move.data.type}', frequency: '${move.data.frequency}', range: '${move.data.range}', damageBase: ${move.data.damageBase}, ac: ${move.data.ac}, damageType: '${move.data.damageType}', effect: '${move.data.effect.replace(/'/g, '\\\'')}' })`;
   }
 }
 

@@ -1,5 +1,9 @@
-export function getInitiativeFormula(combatant) {
-  if (combatant.actor.data.type === 'trainer') return '@stats.spd.value * 100';
+import { calculateStat } from "./pokemonUtils.js";
 
-  return '@stats.spd.value';
+export function getInitiativeFormula(combatant) {
+  const speed = calculateStat(combatant.actor, 'spd');
+
+  if (combatant.actor.data.type === 'trainer') return `${speed} * 100`;
+
+  return `${speed}`;
 }

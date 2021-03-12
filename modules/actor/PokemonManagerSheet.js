@@ -60,10 +60,18 @@ export default class PokemonManagerSheet extends ActorSheet {
     const pokemonData = await fetchPokemonData(this.actor.data.data.sheetID);
     const hotbarPageOffset = (ui.hotbar.page - 1) * 10;
 
-    pokemonData.moves.forEach((move, index) => {
-      const relevantMoveItem = game.items.find(item => item.data.type === 'move' && item.data.flags.ptu?.dbId === move.definition.id);
+    await pokemonData.moves.sort((a, b) => a.sortOrder - b.sortOrder).reduce(async (promise, move, index) => {
+      await promise;
 
-      if (relevantMoveItem) createMoveAtHotbarPosition(relevantMoveItem, hotbarPageOffset + index + 1);
-    });
+      const relevantMoveItem = game.items.find(item => item.data.type === 'move' && item.data.flags.ptu?.dbId === move.id);
+
+      if (relevantMoveItem) {
+        return createMoveAtHotbarPosition(this.actor.data.data.sheetID, relevantMoveItem, hotbarPageOffset + index + 1);
+      } else {
+        console.log(`[PTU] Move not found: ${move.name} (ID: ${move.id})`);
+        
+        return Promise.resolve();
+      }
+    }, Promise.resolve());
   }
 }

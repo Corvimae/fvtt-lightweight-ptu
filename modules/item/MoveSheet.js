@@ -17,7 +17,7 @@ export default class MoveSheet extends ItemSheet {
   }
 
   get template() {
-    return 'systems/ptu/templates/sheets/items/move.html';
+    return 'systems/fvtt-lightweight-ptu/templates/sheets/items/move.html';
   }
 
   getData() {        

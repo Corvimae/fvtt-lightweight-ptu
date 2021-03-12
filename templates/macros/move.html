@@ -1,27 +1,39 @@
 <div class='pokemon-move'>
   <div class='pokemon-move-name'>{{speaker.alias}} uses {{name}}!</div>
   <div class='pokemon-move-data'>
-    <div>{{range}}</div>
-    <div>{{frequency}}</div>
-  </div>
-  {{#if hasAccuracyCheck}}
-  <div class='pokemon-move-ac'>Rolled [[{{accuracyCheck}}]] to hit (AC: {{accuracy}})</div>
-  {{/if}}
-  {{#if hasValidAttackRoll}}
-  {{#if isCrit}}
-  <div class='pokemon-move-crit'>A critical hit!</div>
-  {{/if}}
-  <div class='pokemon-move-damage'>
-    Deals
-    {{#if shouldRollDamage}}
-    [[{{#if isCrit}} {{critDamage}} {{else}} {{damage}} {{/if}} + ({{relevantStatValue}} * {{combatStageMultiplier}}){{#if isStab}} + @stab{{/if}} + {{addedDamage}}]]
-    {{else}}
-    [[/r {{damage}}]]
+    <div class='pokemon-move-accuracy'><span>{{ac}}</span></div>
+    <div class='pokemon-move-range'><span>{{range}}</span></div>
+    <div class='pokemon-move-frequency'><span>{{frequency}}</span></div>
+    {{#if hasValidAttackRoll}}
+    <div class='pokemon-move-damage-base'>
+      <span class="stream-hidden">Damage base: </span>
+      <span>{{damageBase}}</span>
+    </div>
     {{/if}}
-    {{attackTypeName}}  <span class="inline-type {{type}}">{{type}}</span> damage!
   </div>
-  {{/if}}
+  <div class="pokemon-move-rolls">
+    {{#if hasAccuracyCheck}}
+    <div class='pokemon-move-ac'>
+      Rolled [[{{accuracyCheck}}]] to hit
+      <span class="stream-hidden">(AC: {{ac}})</span>
+    </div>
+    {{/if}}
+    {{#if hasValidAttackRoll}}
+    {{#if isCrit}}
+    <div class='pokemon-move-crit'>A critical hit!</div>
+    {{/if}}
+    <div class='pokemon-move-damage'>
+      Deals
+      {{#if shouldRollDamage}}
+      [[{{#if isCrit}} {{critDamage}} {{else}} {{damage}} {{/if}} + ({{relevantStatValue}} * {{combatStageMultiplier}} + {{relevantStatBonus}}) + {{addedDamage}}]]
+      {{else}}
+      [[/r {{damage}}]]
+      {{/if}}
+      {{attackTypeName}}  <span class="inline-type {{type}}">{{moveTypeName}}</span> damage!
+    </div>
+    {{/if}}
+  </div>
   <div class='pokemon-move-effects'>
-    {{effects}}
+    {{effect}}
   </div>
 </div>

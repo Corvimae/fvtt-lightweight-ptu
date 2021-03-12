@@ -1,6 +1,5 @@
 export const preloadTemplates = async function() {
   const templatePaths = [
-    'systems/fvtt-lightweight-ptu/templates/apps/pokemonManagerLogin.html',
     'systems/fvtt-lightweight-ptu/templates/macros/move.html',
     'systems/fvtt-lightweight-ptu/templates/sheets/actors/token.html',
     'systems/fvtt-lightweight-ptu/templates/sheets/actors/trainer.html',

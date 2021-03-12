@@ -9,7 +9,7 @@ export function restartPokemonStatSyncInterval() {
 
   game.ptu.statSyncIntervalId = setInterval(
     syncAllPokemonStatValues,
-    game.settings.get('ptu', 'statSyncInterval') * 1000
+    game.settings.get('fvtt-lightweight-ptu', 'statSyncInterval') * 1000
   );
 }
 
@@ -18,7 +18,7 @@ export async function syncAllPokemonStatValues() {
 
   const pokemonWithSheets = game.actors.entries.filter(actor => actor.data.type === 'pokemon' && actor.data.data.sheetID);
 
-  const pokemonData = await fetch(`https://pokemon.maybreak.com/api/v2/pokemon/mass?ids=${pokemonWithSheets.map(actor => actor.data.data.sheetID).join(',')}`);
+  const pokemonData = await fetch(`https://pokemon.maybreak.com/api/v1/pokemon?query=${pokemonWithSheets.map(actor => actor.data.data.sheetID).join(',')}`);
     
   const pokemonDataBySheetId = (await pokemonData.json()).reduce((acc, data) => ({
     ...acc,
@@ -54,38 +54,47 @@ export async function updatePokemonStatValues(actor, sheetData) {
       },
       stats: {
         hp: {
-          value: sheetData.stats.base.hp + sheetData.stats.added.hp,
+          value: sheetData.baseHP + sheetData.addedHP + sheetData.vitaminHP,
+          bonus: sheetData.bonusHP,
         },
         atk: {
-          value: sheetData.stats.base.attack + sheetData.stats.added.attack,
+          value: sheetData.baseAttack + sheetData.addedAttack + sheetData.vitaminAttack,
+          bonus: sheetData.bonusAttack,
           combatStages: {
-            value: sheetData.stats.combatStages.attack,
+            value: sheetData.attackCombatStages,
           },
         },
         def: {
-          value: sheetData.stats.base.defense + sheetData.stats.added.defense,
+          value: sheetData.baseDefense + sheetData.addedDefense + sheetData.vitaminDefense,
+          bonus: sheetData.bonusDefense,
           combatStages: {
-            value: sheetData.stats.combatStages.defense,
+            value: sheetData.defenseCombatStages,
           },
         },
         spatk: {
-          value: sheetData.stats.base.spattack + sheetData.stats.added.spattack,
+          value: sheetData.baseSpAttack + sheetData.addedSpAttack + sheetData.vitaminSpAttack,
+          bonus: sheetData.bonusSpAttack,
           combatStages: {
-            value: sheetData.stats.combatStages.spattack,
+            value: sheetData.spAttackCombatStages,
           },
         },
         spdef: {
-          value: sheetData.stats.base.spdefense + sheetData.stats.added.spdefense,
+          value: sheetData.baseSpDefense + sheetData.addedSpDefense + sheetData.vitaminSpDefense,
+          bonus: sheetData.bonusSpDefense,
           combatStages: {
-            value: sheetData.stats.combatStages.spdefense,
+            value: sheetData.spDefenseCombatStages,
           },
         },
         spd: {
-          value: sheetData.stats.base.speed + sheetData.stats.added.speed,
+          value: sheetData.baseSpeed + sheetData.addedSpeed + sheetData.vitaminSpeed,
+          bonus: sheetData.bonusSpeed,
+          combatStages: {
+            value: sheetData.speedCombatStages,
+          },
         }
       },
-      type1: sheetData.types[0].name,
-      type2: sheetData.types[1].name,
+      type1: sheetData.type1,
+      type2: sheetData.type2,
       experience: sheetData.experience,
     },
   });

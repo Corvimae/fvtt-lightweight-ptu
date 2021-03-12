@@ -15,7 +15,6 @@ export function calculateStatModifier(actor, stat) {
 }
 
 export function getItemDescription(actor, itemElement) {
-  console.log(itemElement.data('item-id'));
   if (itemElement.data('item-id')) {
     let item = actor.getOwnedItem(itemElement.data('item-id'));
 
