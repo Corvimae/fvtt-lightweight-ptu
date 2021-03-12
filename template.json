@@ -201,10 +201,10 @@
       "type": "",
       "frequency": "",
       "range": "",
-      "damage": "",
+      "damageType": "",
       "ac": 0,
-      "attackType": "",
-      "effects": ""
+      "damageBase": 0,
+      "effect": ""
     },
     "capability": {
       "rank": 0,

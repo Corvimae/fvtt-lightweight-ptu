@@ -29,7 +29,7 @@ export default class MoveSheet extends ItemSheet {
         ...this.item.data.data,
         derived: {
           moveTypeName: this.item.data.data.type[0].toUpperCase() + this.item.data.data.type.slice(1),
-          damageTypeName: this.item.data.data.attackType[0].toUpperCase() + this.item.data.data.attackType.slice(1),
+          damageTypeName: this.item.data.data.damageType[0].toUpperCase() + this.item.data.data.damageType.slice(1),
         }
       },
     };
