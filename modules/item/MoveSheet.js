@@ -28,7 +28,8 @@ export default class MoveSheet extends ItemSheet {
       data: {
         ...this.item.data.data,
         derived: {
-          damageTypeName: this.item.data.data.attackType === 0 ? 'Attack' : (this.item.data.data.attackTime === 1 ? 'Special' : 'Status'),
+          moveTypeName: this.item.data.data.type[0].toUpperCase() + this.item.data.data.type.slice(1),
+          damageTypeName: this.item.data.data.damageType[0].toUpperCase() + this.item.data.data.damageType.slice(1),
         }
       },
     };
