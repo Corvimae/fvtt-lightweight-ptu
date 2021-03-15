@@ -5,6 +5,7 @@ export default class BattleEffects extends Application {
       template: 'systems/fvtt-lightweight-ptu/templates/apps/battleEffects.html',
       title: 'Battle Effects',
       classes: ['battle-effects'],
+      width: 'auto',
       height: 'auto',
       left: 120,
       top: 60,
@@ -21,11 +22,11 @@ export default class BattleEffects extends Application {
     };
   }
 
-  setPositionalOptions() {
+  setPositionalOptions(forceHidden = false) {
     const element = this.element[0];
 
     if (element) {
-      if (this.getData().effects.length) {
+      if (this.getData().effects.length && !forceHidden) {
         element.classList.remove('no-effects');
       } else {
         element.classList.add('no-effects');
@@ -34,8 +35,13 @@ export default class BattleEffects extends Application {
   }
 
   showApp() {
-    this.render(true);
-    this.setPositionalOptions();
+    this.render(true, {
+      classes: ['battle-effects', 'no-effects'],
+    });
+   
+    setTimeout(() => {
+      BattleEffects.instance.updateApp();
+    }, 200);
   }
 
   closeApp() {

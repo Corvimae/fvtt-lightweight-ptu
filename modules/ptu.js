@@ -153,8 +153,20 @@ Hooks.on('chatCommandsReady', chatCommands => {
   }));
 });
 
-Hooks.on('updateCombat', () => {
+Hooks.on('updateCombat', async () => {
+  if (game.combat?.data.round === 1) {
+    BattleEffects.instance.showApp();
+  }
+
   BattleEffects.instance.updateApp();
+});
+
+Hooks.on('deleteCombat', async () => {
+  BattleEffects.instance.updateApp();
+
+  setTimeout(() => {
+    BattleEffects.instance.closeApp();
+  }, 250);
 });
 
 Hooks.on('renderSidebarTab', async (app, html) => {
@@ -173,7 +185,9 @@ Hooks.on('renderSidebarTab', async (app, html) => {
 Hooks.once('ready', () => {
   restartPokemonStatSyncInterval();
 
-  BattleEffects.instance.showApp();
+  if (game.combat?.data.round === 1) {
+    BattleEffects.instance.showApp();
+  }
 
   game.actors.forEach(migrateActorData);
   game.items.forEach(migrateItemData);
