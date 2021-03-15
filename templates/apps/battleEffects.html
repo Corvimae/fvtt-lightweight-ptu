@@ -1,0 +1,13 @@
+<div class="battle-effects-title">
+  Active Battle Effects
+</div>
+<div class="battle-effects">
+  {{#each effects as |effect|}}
+  <div class="battle-effect-row">
+    <div class="battle-effect-name">{{effect.name}}</div>
+    <div class="battle-effect-duration">
+      {{effect.roundsRemaining}}&nbsp;/&nbsp;{{effect.duration}}
+    </div>
+  </div>
+  {{/each}}
+</div>

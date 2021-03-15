@@ -16,6 +16,9 @@ import { restartPokemonStatSyncInterval } from './processes/syncPokemonStatValue
 import { getInitiativeFormula } from './utils/getInitiativeFormula.js';
 import { migrateActorData, migrateItemData } from './migrations/migrate.js';
 import { PTUActor } from './actor/PTUActor.js';
+import BattleEffects from './apps/BattleEffects.js';
+
+BattleEffects.instance = new BattleEffects();
 
 Hooks.once('init', function() {
   console.info('[PTU] Initializing Lightweight PTU...');
@@ -91,8 +94,86 @@ Hooks.on('hotbarDrop', (_hotbar, { type, id }, position) => {
 Hooks.on('renderEntitySheetConfig', renderEntitySheetConfig);
 Hooks.on('renderPokemonManagerSheet', handleRenderPokemonManagerSheet);
 
+Hooks.on('chatCommandsReady', chatCommands => {
+  chatCommands.registerCommand(chatCommands.createCommandFromData({
+    commandKey: '/effect',
+    invokeOnCommand: async (_chatLog, messageText, _chatdata) => {
+      const segments = messageText.split(/ /g);
+
+      const name = segments.slice(0, segments.length - 1).join(' ');;
+      const duration = Number(segments[segments.length - 1]);
+
+      if (!name || !duration) {
+        ui.notifications.warn('/effect requires two arguments: name and duration.');
+
+        return;
+      }
+      
+      if (Number.isNaN(duration)) {
+        ui.notifications.warn(`${duration} is not a valid duration.`);
+
+        return;
+      }
+
+      if (!game.combat) {
+        ui.notifications.warn('There is no active combat.');
+
+        return;
+      }
+
+      let activeEffects = game.combat.data.flags.ptu?.activeEffects || [];
+
+      if (activeEffects.find(item => item.name === name)) {
+        activeEffects = activeEffects.reduce((acc, item) => [
+          ...acc,
+          item.name === name ? {
+            ...item,
+            startTurn: game.combat.data.round || 1,
+            duration,
+          } : item,
+        ], []);
+      } else {
+        activeEffects = [...activeEffects, {
+          name,
+          duration,
+          startTurn: game.combat.data.round || 1,
+        }];
+      }
+
+      game.combat.update({
+        flags: {
+          ptu: {
+            activeEffects,
+          },
+        },
+      });
+    },
+    shouldDisplayToChat: false,
+    description: 'Add a battle effect to the effect list.',
+  }));
+});
+
+Hooks.on('updateCombat', () => {
+  BattleEffects.instance.updateApp();
+});
+
+Hooks.on('renderSidebarTab', async (app, html) => {
+  if (app.options.id === 'combat') {
+    let button = $("<button class='import-pmd'>Show Battle Effects</button>");
+
+    button.click(async () => {
+      BattleEffects.instance.showApp();
+    });
+
+    html.find(".directory-footer").append(button);
+  }
+});
+
+
 Hooks.once('ready', () => {
   restartPokemonStatSyncInterval();
+
+  BattleEffects.instance.showApp();
 
   game.actors.forEach(migrateActorData);
   game.items.forEach(migrateItemData);

@@ -2,7 +2,7 @@
   "name": "fvtt-lightweight-ptu",
   "title": "Lightweight PTU",
   "description": "Some scaffolding for PTU in Foundry",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "Corvimae",
   "esmodules": [
     "modules/ptu.js"
@@ -17,7 +17,14 @@
   "minimumCoreVersion": "0.7.7",
   "compatibleCoreVersion": "0.7.9",
   "primaryTokenAttribute": "resources.health",
+  "dependencies": [
+    {
+      "name": "_chatcommands",
+      "type": "module",
+      "manifest": "https://github.com/League-of-Foundry-Developers/Chat-Commands-Lib/releases/download/1.2.0/module.json"
+    }
+  ],
   "url": "https://github.com/corvimae/fvtt-lightweight-ptu",
   "manifest": "https://raw.githubusercontent.com/corvimae/fvtt-lightweight-ptu/master/system.json",
-  "download": "https://github.com/Corvimae/fvtt-lightweight-ptu/archive/1.0.6.zip"
+  "download": "https://github.com/Corvimae/fvtt-lightweight-ptu/archive/1.0.7.zip"
 }

@@ -920,3 +920,53 @@ button.import-pmd {
   background-color: #000;
 }
 
+.battle-effects .window-content {
+  background: #fff;
+}
+
+.battle-effects {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.battle-effects .battle-effect-row {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  width: 20rem;
+  height: 4rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1rem 0px;
+  background-color: #fff;
+  border-radius: 2rem;
+}
+
+.battle-effect-row + .battle-effect-row {
+  margin-top: 0.5rem;
+}
+
+.battle-effects .battle-effect-row > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items:center;
+  border: none;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.battle-effects .battle-effect-row .battle-effect-name {
+  justify-content: flex-start;
+  padding: 0 1rem;
+}
+
+.battle-effects .battle-effect-duration {
+  padding: 0 2rem;
+}
+
+.battle-effects-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
