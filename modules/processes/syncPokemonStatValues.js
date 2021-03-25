@@ -51,6 +51,9 @@ export async function updatePokemonStatValues(actor, sheetData) {
         health: {
           value: sheetData.currentHealth,
         },
+        injuries: {
+          value: sheetData.injuries,
+        }
       },
       stats: {
         hp: {

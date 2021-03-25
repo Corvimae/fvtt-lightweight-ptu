@@ -60,6 +60,9 @@
           "health": {
             "value": 0,
             "max": 0
+          },
+          "injuries": {
+            "value": 0
           }
         }
       }
@@ -177,9 +180,6 @@
           "value": 0,
           "max": 0,
           "apMaxBonus": 0
-        },
-        "injuries": {
-          "value": 0
         }
       }
     },

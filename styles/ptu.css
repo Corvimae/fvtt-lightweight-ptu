@@ -102,6 +102,14 @@
   margin-left: 1rem;
 }
 
+.injuries-container {
+  display: flex;
+  align-items: center;
+  border-left: 2px groove #eeede0;
+  padding-left: 1rem;
+  margin-left: 1rem;
+}
+
 .char-ap {
   display: flex;
   width: 5rem;
@@ -110,6 +118,7 @@
   margin-left: 0.5rem;
 }
 
+.char-injuries input,
 .char-ap input {
   font-size: 1.25rem;
   width: 2rem;
@@ -122,6 +131,14 @@
   font-size: 1rem;
   color: #7a7971;
   align-self: center;
+}
+
+.char-injuries {
+  display: flex;
+  width: 2.5rem;
+  flex-direction: row;
+  line-height: 24px;
+  margin-left: 0.5rem;
 }
 
 .header-bio {
