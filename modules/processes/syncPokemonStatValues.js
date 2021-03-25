@@ -1,4 +1,4 @@
-import { fetchPokemonData } from '../utils/pokemonUtils.js';
+import { fetchPokemonData, normalizePokemonName } from '../utils/pokemonUtils.js';
 
 export function restartPokemonStatSyncInterval() {
   if (!game.user.isGM) return;
@@ -98,7 +98,6 @@ export async function updatePokemonStatValues(actor, sheetData) {
       experience: sheetData.experience,
     },
   });
-
   actor.getActiveTokens().forEach(token => {
     token.update({
       'bar1.attribute': 'resources.health',

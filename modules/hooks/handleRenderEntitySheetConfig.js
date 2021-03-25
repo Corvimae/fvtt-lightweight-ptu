@@ -45,7 +45,17 @@ export function renderEntitySheetConfig(sheet, _element, entity) {
         const dataModule = game.modules.get('pokemon-manager-data');
         if (dataModule?.active) {
           updatedData.img = `modules/pokemon-manager-data/assets/sprites/${normalizePokemonName(pokemonData.species.name, pokemonData.species.id)}.png`;
-          updatedData['token.img'] =  `modules/pokemon-manager-data/assets/sprites/webm/${normalizePokemonName(pokemonData.species.name, pokemonData.species.id)}.webm`;
+
+          updatedData.token = {
+            ...updatedData.token,
+            img: `modules/pokemon-manager-data/assets/sprites/webm/${normalizePokemonName(pokemonData.species.name, pokemonData.species.id)}.webm`,
+          };
+          
+          await Promise.all(actor.getActiveTokens().map(token => (
+            token.update({
+              img: `modules/pokemon-manager-data/assets/sprites/webm/${normalizePokemonName(pokemonData.species.name, pokemonData.species.id)}.webm`,
+            })
+          ))); 
         }
       }
 
