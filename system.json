@@ -2,7 +2,7 @@
   "name": "fvtt-lightweight-ptu",
   "title": "Lightweight PTU",
   "description": "Some scaffolding for PTU in Foundry",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "Corvimae",
   "esmodules": [
     "modules/ptu.js"
@@ -26,5 +26,5 @@
   ],
   "url": "https://github.com/corvimae/fvtt-lightweight-ptu",
   "manifest": "https://raw.githubusercontent.com/corvimae/fvtt-lightweight-ptu/master/system.json",
-  "download": "https://github.com/Corvimae/fvtt-lightweight-ptu/archive/1.0.8.zip"
+  "download": "https://github.com/Corvimae/fvtt-lightweight-ptu/archive/1.0.9.zip"
 }
