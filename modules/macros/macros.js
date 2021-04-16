@@ -107,13 +107,13 @@ export async function rollMove({ name, type, frequency, range, damageBase, ac, d
   });
 }
 
-export function buildCommandForMove(move) {
+export function buildCommandForMove(move, moveTypeOverride) {
   switch(move.name) {
     case 'Metronome':
       return 'game.ptu.macros.rollMetronome()';
       
     default:
-      return `game.ptu.macros.rollMove({ name: '${move.name}', type: '${move.data.type}', frequency: '${move.data.frequency}', range: '${move.data.range}', damageBase: ${move.data.damageBase}, ac: ${move.data.ac}, damageType: '${move.data.damageType}', effect: '${move.data.effect.replace(/'/g, '\\\'')}' })`;
+      return `game.ptu.macros.rollMove({ name: '${move.name}', type: '${moveTypeOverride ?? move.data.type}', frequency: '${move.data.frequency}', range: '${move.data.range}', damageBase: ${move.data.damageBase}, ac: ${move.data.ac}, damageType: '${move.data.damageType}', effect: '${move.data.effect.replace(/'/g, '\\\'')}' })`;
   }
 }
 

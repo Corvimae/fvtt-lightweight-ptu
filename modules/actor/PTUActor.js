@@ -25,8 +25,6 @@ export class PTUActor extends Actor {
 
     pokemonData.level = calculateLevel(pokemonData.experience);
     pokemonData.stab = Math.floor(pokemonData.level / 5); 
-    console.log(pokemonData, applyInjuries(pokemonData, pokemonData.level + 10 + pokemonData.stats.hp.value * 3));
     pokemonData.resources.health.max = applyInjuries(pokemonData, pokemonData.level + 10 + pokemonData.stats.hp.value * 3);
-  }
-  
+  } 
 }

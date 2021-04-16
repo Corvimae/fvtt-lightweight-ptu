@@ -50,9 +50,13 @@ export default class TrainerSheet extends ActorSheet {
 
       html.find('.delete-item').click(this.handleDeleteItem.bind(this));
 
+      html.find('.show-feature-card').click(this.handleShowFeatureCard.bind(this));
+
       html.find('.item-uses input').click(ev => ev.target.select()).change(this.handleUsesChange.bind(this));
 
       html.find('.item-quantity input').click(ev => ev.target.select()).change(this.handleCarriableQuantityChange.bind(this));
+
+      html.find('.show-inventory-card').click(this.handleShowInventoryCard.bind(this));
 
       html.find('.add-class').click(this.handleAddClass.bind(this));
 
@@ -65,6 +69,8 @@ export default class TrainerSheet extends ActorSheet {
       html.find('.add-capability').click(this.handleAddCapability.bind(this));
       
       html.find('.add-edge').click(this.handleAddEdge.bind(this));
+      
+      html.find('.show-edge-card').click(this.handleShowEdgeCard.bind(this));
 
       html.find('.money-modify-button.increment').click(this.handleIncrementMoney.bind(this));
       html.find('.money-modify-button.decrement').click(this.handleDecrementMoney.bind(this));
@@ -312,6 +318,31 @@ export default class TrainerSheet extends ActorSheet {
     this.actor.deleteOwnedItem(li.dataset.itemId);
   }
 
+  handleShowFeatureCard(event) {
+    event.preventDefault();
+
+    if (!game.streamMode.showCard) {
+      ui.notifications.error(`Stream Mode is not installed.`);
+
+      return;
+    }
+
+    const li = event.currentTarget.closest(".item");
+    const item = this.actor.getOwnedItem(li.dataset.itemId);
+
+    game.streamMode.showCard(
+      `${this.actor.name} - ${item.name}`,
+      {
+        'Frequency': item.data.data.frequency,
+        'Trainer Class': item.data.data.trainerClass,
+        'Tags': item.data.data.tags,
+        'League Legal?': item.data.data.isLeagueLegal ? 'Yes' : 'No',
+        'Uses Remaining': item.data.data.hasUses ? `${item.data.data.uses} / ${item.data.data.totalUses}` : undefined,
+      },
+      item.data.data.description
+    );
+  }
+
   async handleRollSkill(event) {
     event.preventDefault();
 
@@ -393,6 +424,50 @@ export default class TrainerSheet extends ActorSheet {
       name: 'New Edge',
       type: 'edge',
     }, { renderSheet: true });
+  }
+
+  handleShowEdgeCard(event) {
+    event.preventDefault();
+
+    if (!game.streamMode.showCard) {
+      ui.notifications.error(`Stream Mode is not installed.`);
+
+      return;
+    }
+
+    const li = event.currentTarget.closest(".item");
+    const item = this.actor.getOwnedItem(li.dataset.itemId);
+
+    game.streamMode.showCard(
+      `${this.actor.name} - ${item.name}`,
+      {
+        'Ranks': item.data.data.rank,
+      },
+      item.data.data.description
+    );
+  }
+
+  handleShowInventoryCard(event) {
+    event.preventDefault();
+
+    if (!game.streamMode.showCard) {
+      ui.notifications.error(`Stream Mode is not installed.`);
+
+      return;
+    }
+
+    const li = event.currentTarget.closest(".item");
+    const item = this.actor.getOwnedItem(li.dataset.itemId);
+
+    game.streamMode.showCard(
+      `${this.actor.name} - ${item.name}`,
+      {
+        'Category': item.data.data.category !== 'New Category' ? item.data.data.category : undefined,
+        'Quantity': item.data.data.quantity || 1,
+        'Price': item.data.data.price || undefined,
+      },
+      item.data.data.description
+    );
   }
   
   async handleIncrementMoney(event) {

@@ -66,7 +66,12 @@ export default class PokemonManagerSheet extends ActorSheet {
       const relevantMoveItem = game.items.find(item => item.data.type === 'move' && item.data.flags.ptu?.dbId === move.id);
 
       if (relevantMoveItem) {
-        return createMoveAtHotbarPosition(this.actor.data.data.sheetID, relevantMoveItem, hotbarPageOffset + index + 1);
+        return createMoveAtHotbarPosition(
+          this.actor.data.data.sheetID,
+          relevantMoveItem,
+          hotbarPageOffset + index + 1,
+          move.PokemonMove?.typeOverride
+        );
       } else {
         console.log(`[PTU] Move not found: ${move.name} (ID: ${move.id})`);
         
